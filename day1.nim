@@ -32,17 +32,17 @@ when isMainModule:
   import unittest
   suite "day 1":
     test "find number of increases":
-      let input = @[1,10,7,8,5,5,15]
+      let input = @[1, 10, 7, 8, 5, 5, 15]
       check(num_increases(input) == 3)
     test "sliding window sums base case":
-      let input = @[1,1,1]
-      check(sliding_window_sums(input,3) == @[3])
+      let input = @[1, 1, 1]
+      check(sliding_window_sums(input, 3) == @[3])
     test "sliding window sums work":
-      let input = @[1,1,1,2,2,0]
-      check(sliding_window_sums(input,3) == @[3,4,5,4])
+      let input = @[1, 1, 1, 2, 2, 0]
+      check(sliding_window_sums(input, 3) == @[3, 4, 5, 4])
     test "find number of increases in sliding window":
-      let input = @[1,1,1,2,2,0]
+      let input = @[1, 1, 1, 2, 2, 0]
       check(num_increases_sliding_window(input) == 2)
 
-  echo format("part 1: $#" , num_increases(inputLines))
+  echo format("part 1: $#", num_increases(inputLines))
   echo "part 2: {num_increases_sliding_window(inputLines)}".fmt
