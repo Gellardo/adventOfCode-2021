@@ -1,4 +1,4 @@
-import strutils, sequtils, math
+import strutils, sequtils, math, std/strformat
 
 let input = readFile("day1.txt").strip() # remove final newline
 
@@ -45,4 +45,4 @@ when isMainModule:
       check(num_increases_sliding_window(input) == 2)
 
   echo format("part 1: $#" , num_increases(inputLines))
-  echo format("part 2: $#" , num_increases_sliding_window(inputLines))
+  echo "part 2: {num_increases_sliding_window(inputLines)}".fmt
