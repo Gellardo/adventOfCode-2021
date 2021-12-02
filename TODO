@@ -1,0 +1,2 @@
+- integrate timing/benchmarking into the code
+  - example nim: https://stackoverflow.com/q/36577570
