@@ -1,10 +1,13 @@
+## # Day1
+## Something about getting a "depth" reading and looking for how often it decreases
 import strutils, sequtils, math, std/strformat
 
 let input = readFile("day1.txt").strip() # remove final newline
 
 let inputLines = input.splitLines().map(parseInt)
 
-proc num_increases(input: seq[int]): int =
+proc num_increases*(input: seq[int]): int =
+  ## for part 1
   var last = input[0]
   var increases = 0
   for n in input:
@@ -25,7 +28,8 @@ proc sliding_window_sums(input: seq[int], size: int): seq[int] =
       output.add(sum(window))
   return output
 
-proc num_increases_sliding_window(input: seq[int]): int =
+proc num_increases_sliding_window*(input: seq[int]): int =
+  ## for part 2, reusing solution of part 1 after "mapping" to sums of sliding window
   return num_increases(sliding_window_sums(input, 3))
 
 when isMainModule:
