@@ -35,3 +35,4 @@
                         (define aim 0)
                         (let ([final (car (correct-recurse (cons pos aim) in))])
                           (printf "part 2: ~s\n" (* (car final) (cdr final))))))
+; alternatively use current-input-port to read from stdin
