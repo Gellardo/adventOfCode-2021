@@ -1,32 +1,35 @@
 ## # Day 3
 import strutils, sequtils, math, std/strformat
 
-proc gamma(lines: seq[string], length:int): int =
+proc majorDigit(lines: seq[string], position: int): char =
+  var ones = 0
+  let half = lines.len div 2
+  for l in lines:
+    if l[position] == '1':
+      ones = ones + 1
+  #echo fmt"{lines.len} {ones}"
+  if ones > half:
+    return '1'
+  if lines.len mod 2 == 0 and ones == half: # tie break if len even
+    return '1'
+  else:
+    return '0'
+
+proc minorDigit(lines: seq[string], pos: int): char =
+  return if majorDigit(lines, pos) == '1': '0' else: '1'
+
+proc gamma(lines: seq[string]): int =
   var gamma = ""
-  for c in 0..<length:
-    var ones = 0
-    for l in lines:
-      if l[c] == '1':
-        ones = ones + 1
-    if ones > lines.len div 2:
-      gamma = gamma & "1"
-    else:
-      gamma = gamma & "0"
-  echo gamma
+  for c in 0..<lines[0].len:
+    gamma = gamma & majorDigit(lines, c)
+  #echo gamma
 
   return gamma.parseBinInt
-proc epsilon(lines: seq[string], length:int): int =
+
+proc epsilon(lines: seq[string]): int =
   var epsilon = ""
-  for c in 0..<length:
-    var ones = 0
-    for l in lines:
-      if l[c] == '1':
-        ones = ones + 1
-    if ones > lines.len div 2:
-      epsilon = epsilon & "0"
-    else:
-      epsilon = epsilon & "1"
-    #echo fmt"{c}: {ones}"
+  for c in 0..<lines[0].len:
+    epsilon = epsilon & minorDigit(lines, c)
   #echo fmt"{epsilon} {length} {lines.len}"
 
   return epsilon.parseBinInt
@@ -37,9 +40,9 @@ proc powerConsumption*(lines: seq[string]): int =
   ## learning:
   ## Tests should have more lines than length for the if-ones check.
   ## Otherwise using length instead of lines.len will also be successful
-  let gamma = gamma(lines, lines[0].len)
-  let epsilon = epsilon(lines, lines[0].len)
-  echo fmt"{gamma} * {epsilon}"
+  let gamma = gamma(lines)
+  let epsilon = epsilon(lines)
+  #echo fmt"{gamma} * {epsilon}"
   return gamma * epsilon
 
 proc oxygen(lines: seq[string]): int =
@@ -74,12 +77,20 @@ when isMainModule:
         "00010",
         "01010"
       ]
+    test "majorDigit":
+      let digitInput = @["011", "010"]
+      check(majorDigit(digitInput, 0) == '0')
+      check(majorDigit(digitInput, 1) == '1')
+      check(majorDigit(digitInput, 2) == '1')
+      check(minorDigit(digitInput, 0) == '1')
+      check(minorDigit(digitInput, 1) == '0')
+      check(minorDigit(digitInput, 2) == '0')
     test "gamma":
-      check(gamma(input, 3) == 2)
-      check(gamma(inputOfficial, 5) == 22)
+      check(gamma(input) == 2)
+      check(gamma(inputOfficial) == 22)
     test "epsilon":
-      check(epsilon(input, 3) == 5)
-      check(epsilon(inputOfficial, 5) == 9)
+      check(epsilon(input) == 5)
+      check(epsilon(inputOfficial) == 9)
     test "powerConsumption":
       check(powerConsumption(input) == 10)
     test "oxygen":
