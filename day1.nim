@@ -44,7 +44,7 @@ when isMainModule:
       let input = @[1, 1, 1, 2, 2, 0]
       check(num_increases_sliding_window(input) == 2)
 
-  let input = readFile("day1.txt").strip() # remove final newline
+  let input = readFile("day1.txt").strip()       # remove final newline
   let inputLines = input.splitLines().map(parseInt)
   echo format("part 1: $#", num_increases(inputLines))
   echo "part 2: {num_increases_sliding_window(inputLines)}".fmt
