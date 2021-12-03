@@ -48,12 +48,28 @@ proc powerConsumption*(lines: seq[string]): int =
 proc oxygen(lines: seq[string]): int =
   ## my reading: closest to gamma, comparing from the front
   ## wrong reading after all, it is a changing gamma based on the remaining lines (!= overall gamma)
-  return 23
+  var remaining = lines
+  let length = remaining[0].len
+  for pos in 0..<length:
+    let d = majorDigit(remaining, pos)
+    remaining = remaining.filter(proc (l: string): bool = l[pos] == d)
+
+    #echo remaining
+  return remaining[0].parseBinInt
 
 proc co2(lines: seq[string]): int =
   ## my reading: closest to epsilon, comparing from the front
   ## wrong reading after all, it is a changing epsilon based on the remaining lines (!= overall epsilon)
-  return 10
+  var remaining = lines
+  let length = remaining[0].len
+  for pos in 0..<length:
+    let d = minorDigit(remaining, pos)
+    remaining = remaining.filter(proc (l: string): bool = l[pos] == d)
+    # we need an early break since 'least common' can determine a digit that has no line instance
+    if remaining.len == 1: break
+
+    #echo remaining
+  return remaining[0].parseBinInt
 
 proc lifeSupport(lines: seq[string]): int =
   return oxygen(lines) * co2(lines)
