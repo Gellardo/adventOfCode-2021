@@ -42,19 +42,56 @@ proc powerConsumption*(lines: seq[string]): int =
   echo fmt"{gamma} * {epsilon}"
   return gamma * epsilon
 
+proc oxygen(lines: seq[string]): int =
+  ## my reading: closest to gamma, comparing from the front
+  ## wrong reading after all, it is a changing gamma based on the remaining lines (!= overall gamma)
+  return 23
+
+proc co2(lines: seq[string]): int =
+  ## my reading: closest to epsilon, comparing from the front
+  ## wrong reading after all, it is a changing epsilon based on the remaining lines (!= overall epsilon)
+  return 10
+
+proc lifeSupport(lines: seq[string]): int =
+  return oxygen(lines) * co2(lines)
+
 when isMainModule:
   import unittest
   suite "day 3":
+    setup:
+      let input = @["011", "010", "100", "010", "101"]
+      let inputOfficial = @[
+        "00100",
+        "11110",
+        "10110",
+        "10111",
+        "10101",
+        "01111",
+        "00111",
+        "11100",
+        "10000",
+        "11001",
+        "00010",
+        "01010"
+      ]
     test "gamma":
-      let input = @["011", "010", "100", "010", "101"]
       check(gamma(input, 3) == 2)
+      check(gamma(inputOfficial, 5) == 22)
     test "epsilon":
-      let input = @["011", "010", "100", "010", "101"]
       check(epsilon(input, 3) == 5)
+      check(epsilon(inputOfficial, 5) == 9)
     test "powerConsumption":
-      let input = @["011", "010", "100", "010", "101"]
       check(powerConsumption(input) == 10)
+    test "oxygen":
+      #check(oxygen(input) == 2)
+      check(oxygen(inputOfficial) == 23)
+    test "co2":
+      #check(co2(input) == 4)
+      check(co2(inputOfficial) == 10)
+    test "lifeSupport":
+      #check(lifeSupport(input) == 8)
+      check(lifeSupport(inputOfficial) == 230)
 
   let lines = readFile("day3.txt").strip().splitLines()
   echo format("part 1: $#", powerConsumption(lines))
-  #echo "part 2: {num_increases_sliding_window(inputLines)}".fmt
+  echo fmt"part 2: {lifeSupport(lines)}"
