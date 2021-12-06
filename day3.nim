@@ -1,5 +1,16 @@
 ## # Day 3
-import strutils, sequtils, math, std/strformat
+## This was definitely a lot slower than it could have been.
+## Trying to be smart and writing full solutions for gamma and epsilon lead to them "having" to be rewritten for p2.
+## And having no small utility function to use by oxygen/co2.
+##
+## I also misunderstood the oxygen/co2 functions quite a bit.
+## I thought that they were about "finding the closest match to epsilon/gamma".
+## Which would have been correct if the text did not specify that the set to look at got smaller every time.
+## Luckily there are examples which fixed that.
+##
+## Also missing tests for minorDigit had me scratch my head a little (switched the returns around).
+import strutils, sequtils, std/strformat
+import common
 
 proc majorDigit(lines: seq[string], position: int): char =
   var ones = 0
@@ -71,7 +82,13 @@ proc co2(lines: seq[string]): int =
     #echo remaining
   return remaining[0].parseBinInt
 
-proc lifeSupport(lines: seq[string]): int =
+proc lifeSupport*(lines: seq[string]): int =
+  ## part 2 solution
+  ##
+  ## my reading for oxygen/co2: closest to gamma/epsilon, comparing from the front.
+  ##
+  ## wrong reading after all, closest understanding woule be a changing epsilon based on the remaining lines
+  ## (!= overall epsilon).
   return oxygen(lines) * co2(lines)
 
 when isMainModule:
@@ -119,6 +136,8 @@ when isMainModule:
       #check(lifeSupport(input) == 8)
       check(lifeSupport(inputOfficial) == 230)
 
-  let lines = readFile("day3.txt").strip().splitLines()
-  echo format("part 1: $#", powerConsumption(lines))
-  echo fmt"part 2: {lifeSupport(lines)}"
+  benchmark "day2":
+    let lines = readFile("day3.txt").strip().splitLines()
+    benchmark "computation":
+      echo format("part 1: $#", powerConsumption(lines))
+      echo fmt"part 2: {lifeSupport(lines)}"
