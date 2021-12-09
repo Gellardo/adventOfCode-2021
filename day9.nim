@@ -11,10 +11,10 @@ proc findMinima*(lines: seq[string]): seq[int] =
          (c+1 == lines[0].len or lines[r][c] < lines[r][c+1]) and
          (r-1 < 0 or lines[r][c] < lines[r-1][c]) and
          (r+1 == lines.len or lines[r][c] < lines[r+1][c]):
-           minima.add(parseInt(fmt"{lines[r][c]}"))
+          minima.add(parseInt(fmt"{lines[r][c]}"))
   return minima
 
-type Pos = tuple[r:int, c:int]
+type Pos = tuple[r: int, c: int]
 proc findBasinsSizes*(lines: seq[string]): seq[int] =
   ## basically a breadth first search using all non-9 locations
   var sizes: seq[int] = @[]
@@ -22,7 +22,7 @@ proc findBasinsSizes*(lines: seq[string]): seq[int] =
   for r in 0..<lines.len:
     for c in 0..<lines[0].len:
       if lines[r][c] != '9':
-        unvisited.incl((r,c))
+        unvisited.incl((r, c))
   var currentBasin: Hashset[Pos]
   var edge: Hashset[Pos]
   edge.incl(unvisited.pop())
@@ -68,7 +68,7 @@ when isMainModule:
         "996",
         "845",
       ]
-      check(findBasinsSizes(input) == @[4,2])
+      check(findBasinsSizes(input) == @[4, 2])
 
 
   benchmark "day9":

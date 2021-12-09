@@ -46,7 +46,7 @@ when isMainModule:
       check(num_increases_sliding_window(input) == 2)
 
   benchmark "day1":
-    let input = readFile("day1.txt").strip()       # remove final newline
+    let input = readFile("day1.txt").strip()         # remove final newline
     let inputLines = input.splitLines().map(parseInt)
     benchmark "computation":
       echo format("part 1: $#", num_increases(inputLines))
