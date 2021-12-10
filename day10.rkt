@@ -41,7 +41,35 @@
 
 (define (checksum-illegal lines)
   (foldr + 0 (map parent->num (filter char? (map (curryr check-line '()) (map string->list lines))))))
-;(+ (map (filter (map (map lines (string->list)) check-line) char?) parent->num)))
 (test-equal? "checksum-illegal" (checksum-illegal (list "()" "(<)" "[]]")) 60)
 
 (printf "part 1: ~s\n" (checksum-illegal (file->lines "day10.txt")))
+
+(test-equal? "correct stack"
+             (list->string
+              (append (string->list "(<[{")
+                      (check-line (string->list "(<[{") '())))
+             "(<[{}]>)")
+
+(define (autocorrect-score lines)
+  ((curryr sort >) (map (curry foldl correction-score 0) (filter cons? (map (curryr check-line '()) (map string->list lines))))))
+(define (parent->ascore x)
+  (cond
+    [(eq? x #\)) 1]
+    [(eq? x #\]) 2]
+    [(eq? x #\}) 3]
+    [(eq? x #\>) 4]
+    ))
+(define (correction-score e acc)
+  ;(printf "test ~s +  5*~s\n" e acc)
+  (+ (parent->ascore e) (* 5 acc)))
+(test-equal? "correction-scoring" (foldl correction-score 0 (string->list ")}>]})")) 5566)
+(test-equal? "autocorrect-score" (autocorrect-score (list "({[<{(")) (list 5566))
+
+(define (median lst)
+  ; assumes uneven length (guaranteed by the task)
+  (let ([len (length lst)])
+    (list-ref lst (+ (quotient len 2)))))
+(test-equal? "median?" (median (list 4 2 5 7 8)) 5)
+
+(printf "part 2: ~s\n" (median (autocorrect-score (file->lines "day10.txt"))))
