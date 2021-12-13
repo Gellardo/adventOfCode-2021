@@ -1,4 +1,4 @@
-## # Day 6
+## # Day 9
 import strutils, sequtils, std/strformat, math, std/sets, std/algorithm
 import common
 
@@ -54,7 +54,7 @@ proc part2(lines: seq[string]): int =
 
 when isMainModule:
   import unittest
-  suite "day 6":
+  suite "day 9":
     test "find minima":
       let input = @[
         "981",
