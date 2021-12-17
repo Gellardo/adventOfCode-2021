@@ -40,13 +40,32 @@ proc highest_peak*(target_area: tuple): int =
   ## That leaves us with determining the height of that shot:
   ## sum(v_y_max .. 0) = sum (0..v_y_max) = v_y_max * (v_y_max + 1) / 2
   ##
-  ## Either know that formula, go to wolfram alpha or do a for-loop
-  let last_iteration_y: int = target_area.y.a
+  ## Either know that formula, go to wolfram alpha or do a for-loop and remember that the target_area.y can be negative
+  let last_iteration_y: int = abs(target_area.y.a) - 1
 
   return last_iteration_y * (last_iteration_y + 1 ) div 2
 
 proc all_vectors*(target_area: tuple): seq[Vec] =
-  return @[(1,2)]
+  ## Basically only brute force, using the insight about maxiumum y velocity from part 1
+  ## Also assuming that the target area has a positive x range and a negative y range.
+  ## Reasonable given the example and my personal target.
+  let min_v_x = 0
+  let max_v_x = target_area.x.b
+  let min_v_y = target.y.a
+  let max_v_y = abs(target_area.y.a) - 1
+
+  var velocities: seq[Vec] = @[]
+
+  for x in min_v_x .. max_v_x:
+    for y in min_v_y .. max_v_y:
+      var p = initProbe((x:x, y:y))
+      while p.position.x <= target_area.x.b and p.position.y >= target_area.y.a:
+        p = p.tick()
+        if p.position.x in target_area.x and p.position.y in target_area.y:
+          velocities.add((x:x, y:y))
+          break
+
+  return velocities
 
 proc part1(target_area: tuple): int =
   return highest_peak(target_area)
@@ -61,6 +80,8 @@ when isMainModule:
       check(initProbe((x: -2, y: -3)).tick() == (position: (x: -2, y: -3), velocity: (x: -1,y: -4)))
     test "highest_peak":
       check(highest_peak((x: 20 .. 30, y: -10 .. -5)) == 45)
+    test "all vectors":
+      check(part2((x: 20 .. 30, y: -10 .. -5)) == 112)
 
 
   benchmark "day17":
